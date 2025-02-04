@@ -1,6 +1,20 @@
 
+# {
+#     admin 0.0.0.0:2019
+# }
 
-nutzlose.website  {
 
+#nutzlose.website  {
+#
+#    reverse_proxy kong:8000
+#}
+
+
+# Remove admin endpoint since we're using declarative config
+:80 {
     reverse_proxy kong:8000
+}
+
+:443 {
+    reverse_proxy kong:8443
 }
