@@ -1,0 +1,6 @@
+
+
+nutzlose.website  {
+
+    reverse_proxy kong:8000
+}

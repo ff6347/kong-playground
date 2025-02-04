@@ -1,6 +1,8 @@
 version: '3.9'
 
 volumes:
+  caddy_data: {}
+  caddy_config: {}
   kong_data: {}
   kong_prefix_vol:
     driver_opts:
@@ -22,7 +24,7 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile
+      - ./config/Caddyfile:/etc/caddy/Caddyfile
       - caddy_data:/data
       - caddy_config:/config
     restart: unless-stopped
@@ -31,6 +33,7 @@ services:
     image: "${KONG_DOCKER_TAG:-kong:latest}"
     user: "${KONG_USER:-kong}"
     environment:
+      KONG_DATABASE: "off"
       KONG_ADMIN_ACCESS_LOG: /dev/stdout
       KONG_ADMIN_ERROR_LOG: /dev/stderr
       KONG_PROXY_LISTEN: "${KONG_PROXY_LISTEN:-0.0.0.0:8000}"
@@ -68,4 +71,3 @@ services:
       - ./config:/opt/kong
     # security_opt:
     #   - no-new-privileges
-
