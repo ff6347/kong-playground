@@ -15,21 +15,28 @@ volumes:
 
 networks:
   kong-net:
-    external: false
+    # external: true
+    internal: false
 
 services:
   caddy:
+    # profiles: [ "caddy","all" ]
     image: "${CADDY_DOCKER_TAG:-caddy:latest}"
     ports:
       - "80:80"
       - "443:443"
+      # - "2019:2019" # admin endpoint
+      # - "2015:2015" # tutorial endpoint
     volumes:
-      - ./config/Caddyfile:/etc/caddy/Caddyfile
+      - ./config/Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy_data:/data
       - caddy_config:/config
     restart: unless-stopped
-
+    # user: "root"
+    networks:
+      - kong-net
   kong:
+    # profiles: [ "kong","all" ]
     image: "${KONG_DOCKER_TAG:-kong:latest}"
     user: "${KONG_USER:-kong}"
     environment:
